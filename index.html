@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sejarah Kelas XI - SMAN 1 Katapang Kabupaten Bandung</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#09090B',
+                        cardBg: '#13111C',
+                        primary: '#7C3AED',
+                        primaryHover: '#6D28D9',
+                        accentGlow: '#A78BFA'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #09090B;
+            color: #FFFFFF;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(19, 17, 28, 0.72);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(124, 58, 237, 0.22);
+        }
+        .glass-card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card-hover:hover {
+            transform: translateY(-4px);
+            border-color: rgba(124, 58, 237, 0.55);
+            box-shadow: 0 12px 30px -10px rgba(124, 58, 237, 0.35);
+        }
+        .glow-purple {
+            box-shadow: 0 0 35px -5px rgba(124, 58, 237, 0.3);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090B;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272A;
+            border-radius: 999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7C3AED;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.75; }
+        }
+        .animate-pulse-glow {
+            animation: pulseGlow 4s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-primary selection:text-white">
+
+    <!-- KONFIGURASI PREVIEW & DATABASE -->
+    <script>
+        const IS_PREVIEW = true; // Set ke false saat di-deploy ke Google Apps Script
+    </script>
+
+    <!-- CUSTOM TOAST / MESSAGE BOX (Pengganti alert) -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4 sm:px-0"></div>
+
+    <!-- LOADING OVERLAY -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-[#09090B] z-50 flex flex-col items-center justify-center transition-opacity duration-300">
+        <div class="relative flex items-center justify-center">
+            <div class="w-14 h-14 border-4 border-violet-500/20 border-t-violet-600 rounded-full animate-spin"></div>
+            <i data-lucide="compass" class="w-6 h-6 text-violet-400 absolute"></i>
+        </div>
+        <p class="text-sm text-gray-300 font-semibold mt-4 tracking-wide">SMAN 1 KATAPANG</p>
+        <p class="text-xs text-gray-500 mt-1">Menyiapkan Portal Sejarah Kelas XI...</p>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- 1. HALAMAN LOGIN KUSTOM                                               -->
+    <!-- ===================================================================== -->
+    <div id="loginPage" class="flex-1 flex items-center justify-center p-4 relative overflow-hidden hidden">
+        <!-- Ambient Neon Glows -->
+        <div class="absolute -top-32 -left-32 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl pointer-events-none animate-pulse-glow"></div>
+        <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none animate-pulse-glow"></div>
+
+        <div class="glass-card w-full max-w-md p-6 sm:p-8 rounded-3xl glow-purple relative z-10">
+            <!-- Header Sekolah & Guru -->
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center p-3.5 bg-violet-600/15 border border-violet-500/30 rounded-2xl text-violet-400 mb-3 shadow-inner">
+                    <i data-lucide="landmark" class="w-8 h-8"></i>
+                </div>
+                <div class="inline-block px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/30 text-[11px] font-bold tracking-wider text-violet-300 uppercase mb-2">
+                    SMAN 1 KATAPANG KABUPATEN BANDUNG
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">Sejarah Kelas XI</h1>
+                <p class="text-gray-400 text-xs sm:text-sm mt-1">Materi: Organisasi Pergerakan Nasional</p>
+                
+                <div class="mt-3 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 text-xs text-gray-300">
+                    <i data-lucide="award" class="w-3.5 h-3.5 text-violet-400"></i>
+                    <span>Guru: <strong class="text-white">LILY ULFAH HANI, S.Pd</strong></span>
+                </div>
+            </div>
+
+            <!-- Form Login -->
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">Nama Lengkap Siswa / Guru</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500">
+                            <i data-lucide="user" class="w-4 h-4"></i>
+                        </span>
+                        <input type="text" id="loginName" required placeholder="Contoh: Raka Pratama" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 pl-10 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">Pilih Kelas Khusus</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500">
+                            <i data-lucide="users" class="w-4 h-4"></i>
+                        </span>
+                        <select id="loginClass" required class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 pl-10 text-sm text-white focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all appearance-none cursor-pointer">
+                            <option value="" disabled selected>-- Pilih Kelas Anda --</option>
+                            <option value="XI.1">Kelas XI.1</option>
+                            <option value="XI.2">Kelas XI.2</option>
+                            <option value="GURU">Guru Pengampu (Admin Rekap)</option>
+                        </select>
+                        <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-500 pointer-events-none">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">Password Akses</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500">
+                            <i data-lucide="key-round" class="w-4 h-4"></i>
+                        </span>
+                        <input type="password" id="loginPass" required placeholder="Masukkan kata sandi kelas" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 pl-10 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all">
+                    </div>
+                    <p class="text-[11px] text-gray-500 mt-1.5 flex items-center gap-1">
+                        <i data-lucide="info" class="w-3 h-3 text-violet-400"></i>
+                        <span>Password Siswa: <code class="text-violet-300 bg-violet-950/60 px-1.5 py-0.5 rounded">sejarah2026</code> | Guru: <code class="text-violet-300 bg-violet-950/60 px-1.5 py-0.5 rounded">guru2026</code></span>
+                    </p>
+                </div>
+
+                <button type="submit" class="w-full mt-2 bg-violet-600 hover:bg-violet-500 text-white font-semibold py-3.5 rounded-full transition-all shadow-lg shadow-violet-600/30 flex items-center justify-center gap-2">
+                    <span>Masuk Portal Belajar</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </form>
+
+            <!-- Tombol Login Cepat Demo untuk Preview -->
+            <div class="mt-6 pt-5 border-t border-slate-800/80">
+                <p class="text-[11px] text-center text-gray-400 uppercase tracking-wider font-semibold mb-3">Akses Cepat Mode Preview</p>
+                <div class="grid grid-cols-3 gap-2">
+                    <button type="button" onclick="quickLogin('Nadia Putri', 'XI.1', 'Siswa')" class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-violet-600/20 border border-slate-800 hover:border-violet-500/40 text-xs font-medium text-gray-300 hover:text-white transition-all text-center">
+                        Demo XI.1
+                    </button>
+                    <button type="button" onclick="quickLogin('Fajar Nugraha', 'XI.2', 'Siswa')" class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-violet-600/20 border border-slate-800 hover:border-violet-500/40 text-xs font-medium text-gray-300 hover:text-white transition-all text-center">
+                        Demo XI.2
+                    </button>
+                    <button type="button" onclick="quickLogin('LILY ULFAH HANI, S.Pd', 'GURU', 'Admin')" class="p-2.5 rounded-xl bg-violet-950/40 hover:bg-violet-600/30 border border-violet-500/30 text-xs font-semibold text-violet-300 hover:text-white transition-all text-center">
+                        Demo Guru
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- 2. HALAMAN UTAMA APLIKASI                                             -->
+    <!-- ===================================================================== -->
+    <div id="mainApp" class="flex-1 flex flex-col hidden">
+        
+        <!-- TOP NAVBAR (Desktop & Mobile) -->
+        <header class="glass-card sticky top-0 z-40 border-b border-slate-800/80 px-4 lg:px-8 py-3">
+            <div class="max-w-6xl mx-auto flex items-center justify-between gap-4">
+                <!-- Brand & Sekolah -->
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 bg-violet-600/20 border border-violet-500/30 rounded-xl text-violet-400">
+                        <i data-lucide="landmark" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h2 class="text-sm sm:text-base font-bold tracking-tight text-white">Pergerakan Nasional</h2>
+                            <span class="px-2 py-0.5 bg-violet-500/15 border border-violet-500/30 text-violet-300 text-[10px] font-bold rounded-full">SMAN 1 KATAPANG</span>
+                        </div>
+                        <p class="text-xs text-gray-400 flex items-center gap-1.5 mt-0.5" id="userBadgeSession">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                            <span>Siswa • Kelas XI.1</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center gap-1.5 bg-slate-950/70 p-1.5 rounded-full border border-slate-800/80">
+                    <button onclick="switchTab('home')" id="dnav-home" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-violet-600 text-white transition-all flex items-center gap-1.5">
+                        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i> Beranda
+                    </button>
+                    <button onclick="switchTab('material')" id="dnav-material" class="px-4 py-1.5 rounded-full text-xs font-semibold text-gray-400 hover:text-white transition-all flex items-center gap-1.5">
+                        <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Materi Lengkap
+                    </button>
+                    <button onclick="switchTab('quiz')" id="dnav-quiz" class="px-4 py-1.5 rounded-full text-xs font-semibold text-gray-400 hover:text-white transition-all flex items-center gap-1.5">
+                        <i data-lucide="swords" class="w-3.5 h-3.5"></i> Kuis Variatif
+                    </button>
+                    <button onclick="switchTab('leaderboard')" id="dnav-leaderboard" class="px-4 py-1.5 rounded-full text-xs font-semibold text-gray-400 hover:text-white transition-all flex items-center gap-1.5">
+                        <i data-lucide="trophy" class="w-3.5 h-3.5"></i> Peringkat & Rekap
+                    </button>
+                </nav>
+
+                <!-- Info Guru & Tombol Keluar -->
+                <div class="flex items-center gap-3">
+                    <div class="hidden lg:flex flex-col items-end text-right">
+                        <span class="text-[10px] text-gray-400 uppercase tracking-wider">Guru Pengampu</span>
+                        <span class="text-xs font-bold text-violet-300">LILY ULFAH HANI, S.Pd</span>
+                    </div>
+                    <button onclick="logout()" class="p-2.5 bg-slate-900/90 border border-slate-800 rounded-xl text-gray-400 hover:text-red-400 hover:border-red-500/40 transition-all" title="Keluar Aplikasi">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- KONTEN UTAMA -->
+        <main class="flex-1 max-w-6xl w-full mx-auto p-4 lg:p-6 pb-28 md:pb-12">
+            
+            <!-- ============================================================= -->
+            <!-- TAB 1: BERANDA (BENTO GRID DASHBOARD)                         -->
+            <!-- ============================================================= -->
+            <section id="tab-home" class="space-y-6">
+                <!-- Hero Banner -->
+                <div class="glass-card rounded-3xl p-6 lg:p-8 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 translate-x-10 -translate-y-10 w-80 h-80 bg-violet-600/15 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                        <div class="max-w-2xl">
+                            <div class="flex flex-wrap items-center gap-2 mb-3">
+                                <span class="px-3 py-1 bg-violet-600/20 border border-violet-500/30 text-violet-300 rounded-full text-xs font-bold">SMAN 1 KATAPANG KABUPATEN BANDUNG</span>
+                                <span class="px-3 py-1 bg-slate-900/90 border border-slate-800 text-gray-300 rounded-full text-xs font-medium">Guru: LILY ULFAH HANI, S.Pd</span>
+                            </div>
+                            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-2">
+                                Halo, <span id="displayName" class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">Siswa</span>!
+                            </h1>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                Selamat datang di media pembelajaran interaktif Sejarah Kelas XI (<strong id="heroClassBadge" class="text-white">XI.1</strong>). Eksplorasi tonggak kebangkitan bangsa Indonesia dari lahirnya Boedi Oetomo (1908) hingga perjuangan kemerdekaan, lalu taklukkan tantangan kuis ala <em>Clash of Champions</em>!
+                            </p>
+                            
+                            <div class="flex flex-wrap gap-3 mt-6">
+                                <button onclick="switchTab('material')" class="px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold rounded-full transition-all shadow-lg shadow-violet-600/30 flex items-center gap-2">
+                                    <i data-lucide="book-open" class="w-4 h-4"></i> Mulai Baca Materi
+                                </button>
+                                <button onclick="switchTab('quiz')" class="px-6 py-3 bg-slate-900/90 border border-slate-700 hover:border-violet-500 text-white text-sm font-semibold rounded-full transition-all flex items-center gap-2">
+                                    <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i> Tantangan Kuis
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Progress Card Belajar -->
+                        <div class="glass-card p-5 rounded-2xl border border-violet-500/30 lg:w-72 shrink-0 bg-slate-950/50">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Progres Belajar</span>
+                                <span id="progressPercentText" class="text-sm font-extrabold text-violet-400">0%</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden mb-3">
+                                <div id="progressBarFill" class="h-full bg-gradient-to-r from-violet-600 to-fuchsia-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                            <p class="text-xs text-gray-400 mb-3"><span id="completedCountText" class="text-white font-bold">0</span> dari <span class="text-white font-bold">6</span> modul telah dituntaskan.</p>
+                            <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                                <span class="text-gray-400">Skor Terbaikmu:</span>
+                                <span id="personalBestScore" class="font-extrabold text-emerald-400">0 Poin</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bento Grid Fitur & Metrik -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div onclick="switchTab('material')" class="glass-card glass-card-hover p-5 rounded-2xl cursor-pointer">
+                        <div class="p-2.5 bg-violet-500/15 text-violet-400 w-fit rounded-xl mb-3">
+                            <i data-lucide="layers" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-base mb-1">6 Modul Lengkap</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Materi sistematis mulai dari faktor pendorong hingga organisasi masa Jepang.</p>
+                    </div>
+
+                    <div onclick="switchTab('quiz')" class="glass-card glass-card-hover p-5 rounded-2xl cursor-pointer">
+                        <div class="p-2.5 bg-fuchsia-500/15 text-fuchsia-400 w-fit rounded-xl mb-3">
+                            <i data-lucide="gamepad-2" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-base mb-1">3 Mode Kuis</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Speed Quiz, Tebak Tokoh & Organisasi, serta Susun Kronologi Sejarah.</p>
+                    </div>
+
+                    <div onclick="switchTab('leaderboard')" class="glass-card glass-card-hover p-5 rounded-2xl cursor-pointer">
+                        <div class="p-2.5 bg-amber-500/15 text-amber-400 w-fit rounded-xl mb-3">
+                            <i data-lucide="trophy" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-base mb-1">Papan Peringkat</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Kompetisi sehat antar siswa kelas XI.1 dan XI.2 secara real-time.</p>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-2xl border-slate-800/80">
+                        <div class="p-2.5 bg-emerald-500/15 text-emerald-400 w-fit rounded-xl mb-3">
+                            <i data-lucide="shield-check" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-base mb-1">Kelas Terdaftar</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Eksklusif untuk peserta didik Kelas <strong class="text-white">XI.1</strong> & <strong class="text-white">XI.2</strong> SMAN 1 Katapang.</p>
+                    </div>
+                </div>
+
+                <!-- Timeline Ringkas Pergerakan Nasional -->
+                <div class="glass-card p-6 rounded-3xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-base sm:text-lg font-bold">Garis Waktu (Timeline) Pergerakan Nasional</h3>
+                            <p class="text-xs text-gray-400">Tonggak penting kebangkitan kesadaran nasional Indonesia</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-300 text-xs font-semibold">1908 – 1945</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                        <div class="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800">
+                            <span class="text-xs font-extrabold text-violet-400">1908</span>
+                            <p class="text-xs font-bold text-white mt-1">Boedi Oetomo</p>
+                            <p class="text-[11px] text-gray-400 mt-0.5">20 Mei 1908, pelopor organisasi modern.</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800">
+                            <span class="text-xs font-extrabold text-violet-400">1911</span>
+                            <p class="text-xs font-bold text-white mt-1">Sarekat Islam</p>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Gerakan ekonomi & massa Islam terbesar.</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800">
+                            <span class="text-xs font-extrabold text-violet-400">1912</span>
+                            <p class="text-xs font-bold text-white mt-1">Indische Partij</p>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Partai politik radikal Tiga Serangkai.</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800">
+                            <span class="text-xs font-extrabold text-violet-400">1925</span>
+                            <p class="text-xs font-bold text-white mt-1">Perhimpunan Indonesia</p>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Manifesto politik mahasiswa di Belanda.</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800">
+                            <span class="text-xs font-extrabold text-violet-400">1928</span>
+                            <p class="text-xs font-bold text-white mt-1">Sumpah Pemuda</p>
+                            <p class="text-[11px] text-gray-400 mt-0.5">28 Oktober 1928, ikrar satu nusa bangsa.</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800">
+                            <span class="text-xs font-extrabold text-violet-400">1943</span>
+                            <p class="text-xs font-bold text-white mt-1">Putera & PETA</p>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Perjuangan kooperatif masa Jepang.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================= -->
+            <!-- TAB 2: MENU MATERI LENGKAP (6 MODUL KOMPREHENSIF)             -->
+            <!-- ============================================================= -->
+            <section id="tab-material" class="space-y-6 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-extrabold">Modul Materi Pergerakan Nasional</h2>
+                        <p class="text-xs sm:text-sm text-gray-400">Klik kartu materi untuk membaca uraian lengkap dan menandai progres belajarmu.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-300 text-xs font-semibold">
+                            6 Bab Lengkap
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Grid Kartu Materi -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="materialGrid">
+                    <!-- Diisi secara dinamis oleh JavaScript -->
+                </div>
+            </section>
+
+            <!-- ============================================================= -->
+            <!-- TAB 3: MENU KUIS VARIATIF & MODERN (3 MODE INTERAKTIF)        -->
+            <!-- ============================================================= -->
+            <section id="tab-quiz" class="space-y-6 hidden">
+                
+                <!-- Pilihan 3 Mode Kuis -->
+                <div id="quizModeSelector" class="space-y-6">
+                    <div>
+                        <span class="px-3 py-1 rounded-full bg-fuchsia-500/15 border border-fuchsia-500/30 text-fuchsia-300 text-xs font-bold uppercase tracking-wider">Clash of Champions Edition</span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold mt-2">Pilih Arena Tantangan Kuis</h2>
+                        <p class="text-xs sm:text-sm text-gray-400">Uji ketajaman analisis sejarahmu melalui 3 variasi permainan interaktif di bawah ini.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <!-- Mode 1: Speed Quiz -->
+                        <div class="glass-card glass-card-hover p-6 rounded-3xl flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute -right-6 -top-6 w-28 h-28 bg-violet-600/15 rounded-full blur-2xl"></div>
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="p-3 bg-violet-600/20 border border-violet-500/30 rounded-2xl text-violet-400">
+                                        <i data-lucide="zap" class="w-6 h-6"></i>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-violet-500/10 text-violet-300 text-[11px] font-bold">Mode 1 • Timer</span>
+                                </div>
+                                <h3 class="text-lg font-bold mb-2">Pilihan Ganda Cepat (Speed Quiz)</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed mb-4">
+                                    Jawab 6 soal analisis sejarah dengan batas waktu 25 detik per soal. Dapatkan <strong class="text-violet-300">Streak Bonus</strong> untuk jawaban benar beruntun dan simak pembahasan instan!
+                                </p>
+                            </div>
+                            <button onclick="startMode1()" class="w-full py-3 bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold rounded-full transition-all shadow-lg shadow-violet-600/25 flex items-center justify-center gap-2">
+                                <span>Mainkan Speed Quiz</span>
+                                <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Mode 2: Tebak Tokoh & Organisasi -->
+                        <div class="glass-card glass-card-hover p-6 rounded-3xl flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute -right-6 -top-6 w-28 h-28 bg-fuchsia-600/15 rounded-full blur-2xl"></div>
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="p-3 bg-fuchsia-600/20 border border-fuchsia-500/30 rounded-2xl text-fuchsia-400">
+                                        <i data-lucide="search-check" class="w-6 h-6"></i>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-fuchsia-500/10 text-fuchsia-300 text-[11px] font-bold">Mode 2 • Detektif</span>
+                                </div>
+                                <h3 class="text-lg font-bold mb-2">Tebak Tokoh & Organisasi</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed mb-4">
+                                    Analisis 3 kartu petunjuk (<em>Clue Bertahap</em>) yang terbuka satu per satu. Semakin sedikit petunjuk yang kamu buka sebelum menjawab benar, semakin tinggi poinmu!
+                                </p>
+                            </div>
+                            <button onclick="startMode2()" class="w-full py-3 bg-fuchsia-600 hover:bg-fuchsia-500 text-white text-xs font-bold rounded-full transition-all shadow-lg shadow-fuchsia-600/25 flex items-center justify-center gap-2">
+                                <span>Mainkan Tebak Tokoh</span>
+                                <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Mode 3: Susun Kronologi Peristiwa -->
+                        <div class="glass-card glass-card-hover p-6 rounded-3xl flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute -right-6 -top-6 w-28 h-28 bg-emerald-600/15 rounded-full blur-2xl"></div>
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="p-3 bg-emerald-600/20 border border-emerald-500/30 rounded-2xl text-emerald-400">
+                                        <i data-lucide="list-ordered" class="w-6 h-6"></i>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 text-[11px] font-bold">Mode 3 • Logika</span>
+                                </div>
+                                <h3 class="text-lg font-bold mb-2">Susun Kronologi Peristiwa</h3>
+                                <p class="text-xs text-gray-400 leading-relaxed mb-4">
+                                    Urutkan 5 peristiwa bersejarah Pergerakan Nasional dari tahun paling awal hingga paling akhir secara presisi menggunakan tombol naik/turun interaktif.
+                                </p>
+                            </div>
+                            <button onclick="startMode3()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-full transition-all shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2">
+                                <span>Mainkan Susun Kronologi</span>
+                                <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ARENA MODE 1: SPEED QUIZ -->
+                <div id="arenaMode1" class="glass-card rounded-3xl p-6 lg:p-8 hidden">
+                    <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-6 border-b border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <button onclick="exitQuizArena()" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-gray-400 hover:text-white">
+                                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                            </button>
+                            <div>
+                                <span id="m1Counter" class="text-xs font-bold uppercase tracking-wider text-violet-400">Soal 1 dari 6</span>
+                                <div class="flex items-center gap-2 mt-0.5">
+                                    <span class="text-xs text-gray-400">Skor: <strong id="m1LiveScore" class="text-white">0</strong></span>
+                                    <span id="m1StreakBadge" class="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 text-[10px] font-bold hidden">🔥 Streak x2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-extrabold flex items-center gap-1.5">
+                            <i data-lucide="timer" class="w-4 h-4"></i>
+                            <span id="m1TimeLeft">25</span> detik
+                        </div>
+                    </div>
+
+                    <h3 id="m1QuestionText" class="text-base sm:text-lg font-bold leading-relaxed mb-6">Pertanyaan...</h3>
+                    
+                    <div id="m1OptionsContainer" class="space-y-3"></div>
+
+                    <!-- Pembahasan Singkat Tiap Jawaban -->
+                    <div id="m1ExplanationBox" class="mt-6 p-4 rounded-2xl bg-slate-950/90 border border-violet-500/30 hidden">
+                        <div class="flex items-start gap-3">
+                            <div id="m1ExpIcon" class="p-2 rounded-xl bg-emerald-500/15 text-emerald-400 shrink-0">
+                                <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 id="m1ExpTitle" class="text-sm font-bold text-emerald-400">Jawaban Tepat!</h4>
+                                <p id="m1ExpText" class="text-xs text-gray-300 leading-relaxed mt-1">Penjelasan...</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-end">
+                            <button onclick="nextMode1Question()" class="px-5 py-2.5 bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold rounded-full transition-all flex items-center gap-1.5">
+                                <span>Soal Berikutnya</span>
+                                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ARENA MODE 2: TEBAK TOKOH & ORGANISASI (CLUE BERTAHAP) -->
+                <div id="arenaMode2" class="glass-card rounded-3xl p-6 lg:p-8 hidden">
+                    <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <button onclick="exitQuizArena()" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-gray-400 hover:text-white">
+                                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                            </button>
+                            <div>
+                                <span id="m2Counter" class="text-xs font-bold uppercase tracking-wider text-fuchsia-400">Ronde 1 dari 5</span>
+                                <p class="text-xs text-gray-400">Skor Sementara: <strong id="m2LiveScore" class="text-white">0</strong></p>
+                            </div>
+                        </div>
+                        <span id="m2PotentialPoints" class="px-3 py-1 rounded-full bg-fuchsia-500/15 border border-fuchsia-500/30 text-fuchsia-300 text-xs font-bold">
+                            Potensi Poin: +25
+                        </span>
+                    </div>
+
+                    <p class="text-xs text-gray-400 mb-3">Analisis petunjuk sejarah di bawah ini. Kamu dapat membuka petunjuk berikutnya jika masih ragu:</p>
+
+                    <!-- Kartu Petunjuk Bertahap -->
+                    <div id="m2CluesContainer" class="space-y-2.5 mb-5"></div>
+
+                    <div class="flex justify-between items-center mb-6">
+                        <button id="m2RevealBtn" onclick="revealNextClue()" class="px-4 py-2 rounded-full bg-slate-900 border border-fuchsia-500/40 hover:bg-fuchsia-600/20 text-fuchsia-300 text-xs font-semibold transition-all flex items-center gap-1.5">
+                            <i data-lucide="eye" class="w-3.5 h-3.5"></i> Buka Petunjuk Berikutnya (-5 Poin)
+                        </button>
+                        <span id="m2ClueCountInfo" class="text-xs text-gray-500">Petunjuk 1 / 3 terbuka</span>
+                    </div>
+
+                    <div id="m2OptionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+                </div>
+
+                <!-- ARENA MODE 3: SUSUN KRONOLOGI PERISTIWA -->
+                <div id="arenaMode3" class="glass-card rounded-3xl p-6 lg:p-8 hidden">
+                    <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <button onclick="exitQuizArena()" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-gray-400 hover:text-white">
+                                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                            </button>
+                            <div>
+                                <span id="m3SetTitle" class="text-xs font-bold uppercase tracking-wider text-emerald-400">Tantangan Kronologi Sejarah</span>
+                                <p class="text-xs text-gray-400">Urutkan dari peristiwa paling AWAL (atas) ke paling AKHIR (bawah)</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
+                            Maksimal 100 Poin
+                        </span>
+                    </div>
+
+                    <div id="m3ListContainer" class="space-y-3 mb-6"></div>
+
+                    <div id="m3FeedbackArea" class="hidden mb-6 p-4 rounded-2xl bg-slate-950/90 border border-emerald-500/30"></div>
+
+                    <div class="flex flex-wrap gap-3 justify-end">
+                        <button id="m3SubmitBtn" onclick="checkMode3Order()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-full transition-all shadow-lg shadow-emerald-600/25 flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4"></i> Periksa Urutan Kronologi
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LAYAR HASIL AKHIR KUIS -->
+                <div id="quizResultScreen" class="glass-card rounded-3xl p-8 text-center hidden">
+                    <div class="inline-flex p-4 bg-violet-600/20 border border-violet-500/30 text-violet-400 rounded-3xl mb-4 glow-purple">
+                        <i data-lucide="award" class="w-12 h-12"></i>
+                    </div>
+                    <span id="resModeLabel" class="block text-xs font-bold uppercase tracking-wider text-violet-400 mb-1">Mode Kuis Selesai</span>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold mb-2">Luar Biasa, <span id="resStudentName">Siswa</span>!</h3>
+                    <p class="text-xs sm:text-sm text-gray-400 max-w-md mx-auto mb-6">Skor kamu telah dicatat ke Papan Peringkat Kelas <strong id="resStudentClass" class="text-white">XI.1</strong> SMAN 1 Katapang.</p>
+                    
+                    <div class="inline-block px-8 py-5 rounded-3xl bg-slate-950/90 border border-violet-500/40 mb-6">
+                        <span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Total Skor Akhir</span>
+                        <span id="resFinalScore" class="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">100</span>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <button onclick="exitQuizArena()" class="px-6 py-3 bg-slate-900 border border-slate-700 hover:border-violet-500 text-white text-xs font-bold rounded-full transition-all">
+                            Pilih Mode Kuis Lain
+                        </button>
+                        <button onclick="switchTab('leaderboard')" class="px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold rounded-full transition-all shadow-lg shadow-violet-600/25 flex items-center gap-2">
+                            <i data-lucide="trophy" class="w-4 h-4"></i> Lihat Papan Peringkat
+                        </button>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ============================================================= -->
+            <!-- TAB 4: PAPAN PERINGKAT (LEADERBOARD) & REKAP NILAI KELAS      -->
+            <!-- ============================================================= -->
+            <section id="tab-leaderboard" class="space-y-6 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-extrabold">Papan Peringkat & Rekap Nilai</h2>
+                        <p class="text-xs sm:text-sm text-gray-400">Klasemen nilai tertinggi siswa Kelas XI.1 & XI.2 SMAN 1 Katapang</p>
+                    </div>
+
+                    <!-- Filter Kelas -->
+                    <div class="flex items-center gap-1.5 bg-slate-950/80 p-1.5 rounded-full border border-slate-800 w-fit">
+                        <button onclick="filterLeaderboard('ALL')" id="lbFilter-ALL" class="px-4 py-1.5 rounded-full text-xs font-bold bg-violet-600 text-white transition-all">Semua Kelas</button>
+                        <button onclick="filterLeaderboard('XI.1')" id="lbFilter-XI.1" class="px-4 py-1.5 rounded-full text-xs font-bold text-gray-400 hover:text-white transition-all">Kelas XI.1</button>
+                        <button onclick="filterLeaderboard('XI.2')" id="lbFilter-XI.2" class="px-4 py-1.5 rounded-full text-xs font-bold text-gray-400 hover:text-white transition-all">Kelas XI.2</button>
+                    </div>
+                </div>
+
+                <!-- Kartu Statistik Kelas -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="glass-card p-4 rounded-2xl flex items-center gap-4">
+                        <div class="p-3 rounded-xl bg-amber-500/15 text-amber-400">
+                            <i data-lucide="crown" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] text-gray-400 uppercase font-semibold">Peringkat 1 Saat Ini</span>
+                            <h4 id="lbTopStudent" class="text-sm font-bold text-white">-</h4>
+                        </div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl flex items-center gap-4">
+                        <div class="p-3 rounded-xl bg-violet-500/15 text-violet-400">
+                            <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] text-gray-400 uppercase font-semibold">Rata-Rata Skor</span>
+                            <h4 id="lbAvgScore" class="text-sm font-bold text-white">0 Poin</h4>
+                        </div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl flex items-center gap-4">
+                        <div class="p-3 rounded-xl bg-emerald-500/15 text-emerald-400">
+                            <i data-lucide="users" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] text-gray-400 uppercase font-semibold">Total Percobaan Kuis</span>
+                            <h4 id="lbTotalEntries" class="text-sm font-bold text-white">0 Peserta</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabel Leaderboard -->
+                <div class="glass-card rounded-3xl overflow-hidden border border-slate-800/90">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 bg-slate-950/60 text-[11px] uppercase tracking-wider text-gray-400">
+                                    <th class="py-3.5 px-4 font-bold">Peringkat</th>
+                                    <th class="py-3.5 px-4 font-bold">Nama Siswa</th>
+                                    <th class="py-3.5 px-4 font-bold">Kelas</th>
+                                    <th class="py-3.5 px-4 font-bold">Mode Kuis</th>
+                                    <th class="py-3.5 px-4 font-bold text-right">Skor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboardTableBody" class="divide-y divide-slate-800/60 text-xs sm:text-sm">
+                                <!-- Diisi dinamis oleh JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================= -->
+            <!-- 6. FOOTER IDENTITAS SEKOLAH & GURU                            -->
+            <!-- ============================================================= -->
+            <footer class="mt-12 pt-6 border-t border-slate-800/70 text-center text-xs text-gray-500 space-y-1">
+                <p class="font-bold text-gray-300 tracking-wide">SMAN 1 KATAPANG KABUPATEN BANDUNG</p>
+                <p>Mata Pelajaran Sejarah Kelas XI • Guru Pengampu: <span class="text-violet-400 font-semibold">LILY ULFAH HANI, S.Pd</span></p>
+            </footer>
+
+        </main>
+
+        <!-- BOTTOM NAVIGATION BAR (Mobile-First) -->
+        <nav class="md:hidden glass-card fixed bottom-0 left-0 right-0 border-t border-slate-800/90 px-3 py-2.5 flex justify-around items-center z-40">
+            <button onclick="switchTab('home')" id="mnav-home" class="flex flex-col items-center gap-1 text-violet-400 transition-all">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                <span class="text-[10px] font-semibold">Beranda</span>
+            </button>
+            <button onclick="switchTab('material')" id="mnav-material" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition-all">
+                <i data-lucide="book-open" class="w-5 h-5"></i>
+                <span class="text-[10px] font-semibold">Materi</span>
+            </button>
+            <button onclick="switchTab('quiz')" id="mnav-quiz" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition-all">
+                <i data-lucide="swords" class="w-5 h-5"></i>
+                <span class="text-[10px] font-semibold">Kuis</span>
+            </button>
+            <button onclick="switchTab('leaderboard')" id="mnav-leaderboard" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition-all">
+                <i data-lucide="trophy" class="w-5 h-5"></i>
+                <span class="text-[10px] font-semibold">Peringkat</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL BACAAN LENGKAP MATERI                                           -->
+    <!-- ===================================================================== -->
+    <div id="materialModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card w-full max-w-2xl max-h-[88vh] flex flex-col rounded-3xl border border-violet-500/30 shadow-2xl overflow-hidden">
+            <!-- Modal Header -->
+            <div class="p-5 sm:p-6 border-b border-slate-800 flex items-start justify-between gap-4 bg-slate-950/60">
+                <div>
+                    <span id="modalCategory" class="px-2.5 py-1 rounded-full bg-violet-500/15 border border-violet-500/30 text-violet-300 text-[10px] font-bold uppercase tracking-wider">Bab 1</span>
+                    <h3 id="modalTitle" class="text-lg sm:text-xl font-extrabold text-white mt-2">Judul Materi</h3>
+                </div>
+                <button onclick="closeMaterialModal()" class="p-2 rounded-full bg-slate-900 border border-slate-800 text-gray-400 hover:text-white transition-all">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div id="modalBody" class="p-5 sm:p-6 overflow-y-auto space-y-5 text-sm text-gray-300 leading-relaxed">
+                <!-- Konten lengkap diinjeksi lewat JS -->
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 sm:p-5 border-t border-slate-800 bg-slate-950/60 flex flex-wrap items-center justify-between gap-3">
+                <button onclick="closeMaterialModal()" class="px-4 py-2.5 rounded-full bg-slate-900 border border-slate-800 text-xs font-semibold text-gray-300 hover:text-white transition-all">
+                    Tutup Bacaan
+                </button>
+                <button id="modalCompleteBtn" onclick="toggleMaterialComplete()" class="px-6 py-2.5 rounded-full bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold transition-all shadow-lg shadow-violet-600/25 flex items-center gap-2">
+                    <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                    <span>Tandai Selesai Dipelajari</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- LOGIKA JAVASCRIPT LENGKAP                                             -->
+    <!-- ===================================================================== -->
+    <script>
+        // -------------------------------------------------------------------
+        // 1. DATABASE MATERI LENGKAP (6 MODUL KOMPREHENSIF)
+        // -------------------------------------------------------------------
+        const materialsData = [
+            {
+                id: "modul-1",
+                badge: "Modul 01 • Fondasi",
+                year: "Abad ke-20",
+                title: "Latar Belakang Lahirnya Pergerakan Nasional",
+                snippet: "Perubahan strategi perjuangan bangsa Indonesia dari perlawanan fisik kedaerahan menjadi organisasi modern terpelajar.",
+                latarBelakang: "Memasuki awal abad ke-20, perlawanan rakyat Indonesia terhadap kolonialisme Belanda mengalami transformasi besar. Perjuangan fisik yang bersifat kedaerahan dan bergantung pada pemimpin karismatik terbukti mudah dipatahkan oleh politik adu domba (devide et impera) Belanda. Lahirlah kesadaran baru untuk berjuang melalui organisasi modern yang terstruktur.",
+                tokoh: ["Mr. C.Th. van Deventer (Pelopor Politik Etis)", "Dr. Wahidin Soedirohoesodo", "R.A. Kartini", "Tirto Adhi Soerjo (Perintis Pers Nasional)"],
+                tujuanStrategi: "Memanfaatkan golongan terpelajar hasil Politik Etis (Edukasi, Irigasi, Emigrasi) serta perkembangan pers bumiputra (seperti Medan Prijaji) untuk membangun kesadaran nasional dan persatuan lintas daerah.",
+                poinPenting: [
+                    "Faktor Internal: Penderitaan rakyat akibat penjajahan, kenangan kejayaan masa lampau (Sriwijaya & Majapahit), munculnya kaum terpelajar, dan kemajuan pers.",
+                    "Faktor Eksternal: Kemenangan Jepang atas Rusia (1905), kebangkitan nasionalisme di Asia (India, Filipina, Tiongkok), serta masuknya paham baru (nasionalisme, demokrasi, liberalisme).",
+                    "Politik Etis menjadi 'senjata makan tuan' bagi Belanda karena melahirkan elite intelektual bumiputra."
+                ]
+            },
+            {
+                id: "modul-2",
+                badge: "Modul 02 • Pelopor",
+                year: "20 Mei 1908",
+                title: "Boedi Oetomo (1908) – Pelopor Kebangkitan Nasional",
+                snippet: "Organisasi modern pertama yang digagas dr. Wahidin Soedirohoesodo dan didirikan mahasiswa STOVIA pimpinan Sutomo.",
+                latarBelakang: "Pada tahun 1906–1907, dr. Wahidin Soedirohoesodo berkeliling Pulau Jawa mengampanyekan gagasan 'Studiefonds' (dana pendidikan) untuk membantu pemuda bumiputra cerdas yang kekurangan biaya. Gagasan ini disambut antusias oleh mahasiswa STOVIA di Batavia hingga akhirnya didirikan Boedi Oetomo pada 20 Mei 1908.",
+                tokoh: ["dr. Wahidin Soedirohoesodo (Penggagas)", "Sutomo (Ketua Pertama)", "Goenawan Mangoenkoesoemo", "Soeradji Tirtonegoro", "R.T. Tirtokusumo (Ketua setelah Kongres I)"],
+                tujuanStrategi: "Bersifat kooperatif dan non-politik pada awalnya, dengan fokus utama memajukan pengajaran, pendidikan, pertanian, peternakan, perdagangan, serta menghidupkan kembali kebudayaan Jawa dan Madura.",
+                poinPenting: [
+                    "Tanggal berdirinya (20 Mei 1908) ditetapkan pemerintah Indonesia sebagai Hari Kebangkitan Nasional.",
+                    "Kongres I di Yogyakarta (Oktober 1908) memunculkan dua aliran: golongan muda yang ingin bergerak di bidang politik dan golongan tua yang fokus pada sosial-budaya.",
+                    "Menjadi inspirasi lahirnya berbagai organisasi pergerakan modern di seluruh Nusantara."
+                ]
+            },
+            {
+                id: "modul-3",
+                badge: "Modul 03 • Massa & Ekonomi",
+                year: "1911 / 1912",
+                title: "Sarekat Islam (SI) – Gerakan Ekonomi & Massa Islam",
+                snippet: "Berawal dari Sarekat Dagang Islam (SDI) oleh H. Samanhudi, lalu bertransformasi menjadi gerakan massa besar di bawah H.O.S. Tjokroaminoto.",
+                latarBelakang: "Pada tahun 1911 di Laweyan, Surakarta, Haji Samanhudi mendirikan Sarekat Dagang Islam (SDI) untuk melindungi pedagang batik pribumi dari monopoli pedagang asing serta menghadapi tekanan sosial. Pada 10 September 1912, H.O.S. Tjokroaminoto mengubah namanya menjadi Sarekat Islam (SI) agar ruang geraknya lebih luas mencakup seluruh lapisan masyarakat.",
+                tokoh: ["Haji Samanhudi (Pendiri SDI)", "H.O.S. Tjokroaminoto (Raja Jawa Tanpa Mahkota)", "Haji Agus Salim", "Abdul Muis", "Semaun (Faksi SI Merah)"],
+                tujuanStrategi: "Mengembangkan jiwa dagang dan ekonomi kerakyatan, memajukan pengajaran dan kehidupan beragama Islam, serta memperjuangkan pemerintahan sendiri (zelfbestuur) secara demokratis.",
+                poinPenting: [
+                    "SI menjadi organisasi pergerakan pertama yang memiliki anggota ratusan ribu orang dari berbagai kalangan rakyat jelata.",
+                    "Terjadi perpecahan internal akibat infiltrasi paham komunis (ISDV): SI Putih (H.O.S. Tjokroaminoto & Agus Salim) dan SI Merah (Semaun & Darsono).",
+                    "Menerapkan disiplin partai pada tahun 1921 yang melarang keanggotaan ganda."
+                ]
+            },
+            {
+                id: "modul-4",
+                badge: "Modul 04 • Radikal Non-Kooperatif",
+                year: "25 Des 1912",
+                title: "Indische Partij (1912) – Partai Politik Radikal Tiga Serangkai",
+                snippet: "Partai politik pertama di Hindia Belanda yang secara terang-terangan menuntut kemerdekaan penuh dengan semboyan 'Indie voor Indisch'.",
+                latarBelakang: "Didirikan di Bandung pada 25 Desember 1912 oleh tokoh legendaris 'Tiga Serangkai'. Indische Partij lahir sebagai wadah persatuan seluruh golongan penduduk Hindia Belanda (bumiputra, Indo-Belanda, Tionghoa, Arab) yang merasakan diskriminasi pemerintah kolonial.",
+                tokoh: ["E.F.E. Douwes Dekker (Danudirdja Setiabudi)", "dr. Tjipto Mangoenkoesoemo", "R.M. Suwardi Suryaningrat (Ki Hajar Dewantara)"],
+                tujuanStrategi: "Menempuh jalur politik radikal dan non-kooperatif dengan tujuan utama membangkitkan patriotisme seluruh Indiers dan mempersiapkan kemerdekaan tanah air dari penjajahan Belanda.",
+                poinPenting: [
+                    "Semboyan terkenal: 'Indie los van Holland' (Hindia bebas dari Belanda) dan 'Indie voor Indisch' (Hindia untuk orang Hindia).",
+                    "Pada tahun 1913, Suwardi Suryaningrat menulis pamflet tajam berjudul 'Als ik eens Nederlander was' (Seandainya Aku Seorang Belanda) untuk mengkritik perayaan 100 tahun kemerdekaan Belanda dari Prancis yang dibiayai rakyat Hindia.",
+                    "Dinyatakan sebagai partai terlarang oleh Gubernur Jenderal Idenburg pada Maret 1913 dan Tiga Serangkai diasingkan ke Belanda."
+                ]
+            },
+            {
+                id: "modul-5",
+                badge: "Modul 05 • Ideologi Nasional",
+                year: "1925 & 1927",
+                title: "Perhimpunan Indonesia (PI) & Partai Nasional Indonesia (PNI)",
+                snippet: "Perjuangan diplomatik mahasiswa di Belanda dan radikalisme massa Ir. Soekarno dengan asas Marhaenisme.",
+                latarBelakang: "Perhimpunan Indonesia (PI) berawal dari Indische Vereeniging (1908) di Belanda yang diubah orientasinya menjadi organisasi politik radikal pada 1925 oleh Mohammad Hatta dkk. Sementara itu, di Bandung pada 4 Juli 1927, Ir. Soekarno bersama alumni Algemeene Studieclub mendirikan Perserikatan Nasional Indonesia (PNI).",
+                tokoh: ["Mohammad Hatta (Ketua PI)", "Nazir Pamontjak & Achmad Soebardjo", "Ir. Soekarno (Ketua PNI)", "Mr. Iskaq Tjokrohadisuryo & Dr. Tjipto Mangoenkoesoemo"],
+                tujuanStrategi: "Menerapkan asas 'self-help' (berdiri di atas kaki sendiri), non-kooperasi terhadap pemerintah kolonial, dan persatuan nasional tanpa memandang perbedaan agama maupun suku untuk mencapai Indonesia Merdeka.",
+                poinPenting: [
+                    "PI menerbitkan majalah 'Indonesia Merdeka' dan aktif melobi Liga Menentang Imperialisme dan Penindasan Kolonial di Brussel (1927).",
+                    "PNI mengusung ideologi Marhaenisme untuk membela rakyat kecil yang melarat akibat sistem kapitalisme-imperialisme.",
+                    "Pidato pembelaan Ir. Soekarno yang terkenal di pengadilan Bandung (1930) berjudul 'Indonesia Menggugat'."
+                ]
+            },
+            {
+                id: "modul-6",
+                badge: "Modul 06 • Persatuan & Pendudukan",
+                year: "1928 – 1945",
+                title: "Sumpah Pemuda (1928) & Organisasi Masa Pendudukan Jepang",
+                snippet: "Puncak integrasi pemuda Nusantara dalam Kongres Pemuda II serta strategi kooperatif di era Jepang melalui Putera dan PETA.",
+                latarBelakang: "Menyadari perlunya peleburan organisasi pemuda kedaerahan (Jong Java, Jong Sumatranen Bond, Jong Celebes, dll), diselenggarakan Kongres Pemuda I (1926) dan Kongres Pemuda II pada 27–28 Oktober 1928. Memasuki tahun 1942, Jepang menggantikan Belanda dan membentuk organisasi semi-militer maupun propaganda yang dimanfaatkan tokoh nasionalis.",
+                tokoh: ["Soegondo Djojopoespito (Ketua Kongres Pemuda II)", "Mohammad Yamin (Perumus ikrar)", "W.R. Supratman (Pencipta lagu Indonesia Raya)", "Empat Serangkai Putera (Soekarno, Hatta, Ki Hajar Dewantara, K.H. Mas Mansyur)"],
+                tujuanStrategi: "Mengukuhkan identitas satu tanah air, satu bangsa, dan satu bahasa Indonesia pada 1928. Pada masa Jepang (1942–1945), tokoh pergerakan memakai strategi kooperatif (memanfaatkan Putera & PETA) serta gerakan bawah tanah (Sutan Sjahrir & Amir Sjarifuddin).",
+                poinPenting: [
+                    "Pada Kongres Pemuda II (28 Oktober 1928), lagu kebangsaan 'Indonesia Raya' ciptaan W.R. Supratman pertama kali diperdengarkan dengan biola.",
+                    "Pusat Tenaga Rakyat (Putera) dibentuk Jepang tahun 1943 untuk propaganda perang, namun dimanfaatkan Empat Serangkai untuk menanamkan semangat nasionalisme kepada rakyat.",
+                    "Pembela Tanah Air (PETA) melatih pemuda Indonesia secara militer (seperti Soedirman dan Supriyadi) yang kelak menjadi cikal bakal TNI."
+                ]
+            }
+        ];
+
+        // -------------------------------------------------------------------
+        // 2. BANK SOAL KUIS VARIATIF (3 MODE INTERAKTIF)
+        // -------------------------------------------------------------------
+        
+        // MODE 1: Pilihan Ganda Cepat (Speed Quiz)
+        const mode1Questions = [
+            {
+                q: "Mengapa perlawanan bangsa Indonesia sebelum tahun 1908 sering mengalami kegagalan dalam mengusir penjajah Belanda?",
+                options: [
+                    "Karena bangsa Indonesia tidak memiliki senjata api sama sekali",
+                    "Perjuangan masih bersifat kedaerahan, sporadis, dan bergantung pada satu pemimpin karismatik",
+                    "Seluruh raja di Nusantara telah menandatangani perjanjian damai dengan Belanda",
+                    "Tidak adanya dukungan ekonomi dari negara-negara Eropa"
+                ],
+                answer: 1,
+                explanation: "Sebelum 1908, perlawanan bersifat lokal (kedaerahan) sehingga mudah dipatahkan Belanda melalui politik adu domba (devide et impera) dan penangkapan pemimpinnya."
+            },
+            {
+                q: "Gagasan 'Studiefonds' (dana pelajar) yang menjadi cikal bakal berdirinya organisasi Boedi Oetomo pada 20 Mei 1908 dicetuskan oleh...",
+                options: [
+                    "Sutomo",
+                    "H.O.S. Tjokroaminoto",
+                    "dr. Wahidin Soedirohoesodo",
+                    "Ki Hajar Dewantara"
+                ],
+                answer: 2,
+                explanation: "dr. Wahidin Soedirohoesodo berkeliling Jawa menggalang dana pendidikan (Studiefonds) yang kemudian menginspirasi mahasiswa STOVIA pimpinan Sutomo mendirikan Boedi Oetomo."
+            },
+            {
+                q: "Artikel tajam berjudul 'Als ik eens Nederlander was' (Seandainya Aku Seorang Belanda) tahun 1913 ditulis oleh Suwardi Suryaningrat untuk mengkritik...",
+                options: [
+                    "Penerapan sistem tanam paksa di Pulau Jawa",
+                    "Rencana perayaan 100 tahun kemerdekaan Belanda dari Prancis yang memungut biaya dari rakyat Hindia",
+                    "Pembubaran organisasi Sarekat Islam di Surakarta",
+                    "Penangkapan Ir. Soekarno di Bandung"
+                ],
+                answer: 1,
+                explanation: "Suwardi Suryaningrat (Ki Hajar Dewantara) mengecam ketidakadilan pemerintah kolonial yang menarik sumbangan dari rakyat terjajah untuk merayakan kemerdekaan Belanda."
+            },
+            {
+                q: "Perpecahan Sarekat Islam (SI) menjadi SI Putih dan SI Merah pada tahun 1921 disebabkan oleh...",
+                options: [
+                    "Perbedaan lokasi pusat kantor antara Bandung dan Surabaya",
+                    "Penyusupan paham sosialis-komunis dari ISDV yang dibawa oleh Semaun dan Darsono",
+                    "Penolakan pedagang batik Laweyan terhadap kepemimpinan Haji Samanhudi",
+                    "Keinginan SI untuk bekerja sama dengan pemerintah kolonial Belanda"
+                ],
+                answer: 1,
+                explanation: "Organisasi ISDV pimpinan Sneevliet menyusupkan paham komunis ke tubuh SI melalui Semaun dan Darsono, sehingga memicu penerapan disiplin partai oleh H.O.S. Tjokroaminoto dan Agus Salim."
+            },
+            {
+                q: "Dalam sidang pengadilan Landraad Bandung tahun 1930, Ir. Soekarno membacakan pidato pembelaan legendaris yang mengupas kebobrokan kolonialisme berjudul...",
+                options: [
+                    "Indonesia Merdeka",
+                    "Menuju Republik Indonesia",
+                    "Indonesia Menggugat",
+                    "Perjuangan Kita"
+                ],
+                answer: 2,
+                explanation: "Pidato 'Indonesia Menggugat' dibacakan Ir. Soekarno di hadapan hakim kolonial Bandung pada Desember 1930 sebagai pembelaan atas aktivitas Partai Nasional Indonesia (PNI)."
+            },
+            {
+                q: "Manfaat terbesar pembentukan Pembela Tanah Air (PETA) oleh pemerintah pendudukan Jepang bagi perjuangan kemerdekaan Indonesia adalah...",
+                options: [
+                    "Membantu Jepang memenangkan perang melawan Sekutu di Pasifik",
+                    "Memberikan pendidikan dan pelatihan militer bagi pemuda Indonesia sebagai cikal bakal TNI",
+                    "Menghapuskan seluruh pajak hasil pertanian rakyat desa",
+                    "Membubarkan organisasi keagamaan di seluruh Pulau Jawa"
+                ],
+                answer: 1,
+                explanation: "Melalui PETA, ribuan pemuda Indonesia memperoleh pelatihan kemiliteran dan kepemimpinan pasukan (seperti Jenderal Soedirman) yang menjadi modal utama mempertahankan kemerdekaan."
+            }
+        ];
+
+        // MODE 2: Tebak Tokoh & Organisasi (Clue Bertahap)
+        const mode2Rounds = [
+            {
+                clues: [
+                    "Petunjuk 1: Organisasi ini didirikan di kota Bandung pada tanggal 25 Desember 1912.",
+                    "Petunjuk 2: Organisasi ini bersifat non-kooperatif, radikal, dan terbuka bagi semua golongan penduduk Hindia Belanda.",
+                    "Petunjuk 3: Dipimpin oleh Tiga Serangkai dengan semboyan terkenal 'Indie voor Indisch'."
+                ],
+                options: ["Boedi Oetomo", "Indische Partij", "Sarekat Islam", "Partai Nasional Indonesia"],
+                answer: 1
+            },
+            {
+                clues: [
+                    "Petunjuk 1: Tokoh ini dijuluki oleh pemerintah kolonial Belanda sebagai 'Raja Jawa Tanpa Mahkota' (De Ongekroonde van Java).",
+                    "Petunjuk 2: Rumah kosnya di Surabaya menjadi tempat tinggal dan belajar tokoh-tokoh muda seperti Soekarno, Semaun, dan Kartosuwiryo.",
+                    "Petunjuk 3: Beliau mengubah Sarekat Dagang Islam (SDI) menjadi Sarekat Islam (SI) pada tahun 1912."
+                ],
+                options: ["Haji Samanhudi", "H.O.S. Tjokroaminoto", "Haji Agus Salim", "K.H. Ahmad Dahlan"],
+                answer: 1
+            },
+            {
+                clues: [
+                    "Petunjuk 1: Organisasi ini awalnya bernama Indische Vereeniging yang berdiri di negeri Belanda tahun 1908.",
+                    "Petunjuk 2: Pada tahun 1925, organisasi ini mengubah namanya dan mengeluarkan Manifesto Politik yang menuntut kemerdekaan penuh.",
+                    "Petunjuk 3: Dipimpin oleh Mohammad Hatta dan menerbitkan majalah 'Indonesia Merdeka'."
+                ],
+                options: ["Perhimpunan Indonesia", "Tri Koro Dharmo", "Jong Sumatranen Bond", "GAPI (Gabungan Politik Indonesia)"],
+                answer: 0
+            },
+            {
+                clues: [
+                    "Petunjuk 1: Tokoh pemuda asal Sumatera Barat yang berperan sebagai sekretaris dalam Kongres Pemuda II tahun 1928.",
+                    "Petunjuk 2: Beliau merumuskan konsep ikrar Sumpah Pemuda di atas secarik kertas saat rapat berlangsung.",
+                    "Petunjuk 3: Ia juga dikenal sebagai sastrawan sekaligus sejarawan pelopor Indonesia."
+                ],
+                options: ["Soegondo Djojopoespito", "W.R. Supratman", "Mohammad Yamin", "Amir Sjarifuddin"],
+                answer: 2
+            },
+            {
+                clues: [
+                    "Petunjuk 1: Organisasi bentukan Jepang pada Maret 1943 yang dipimpin oleh tokoh 'Empat Serangkai'.",
+                    "Petunjuk 2: Jepang membentuknya untuk memusatkan potensi rakyat guna membantu perang Asia Timur Raya.",
+                    "Petunjuk 3: Dimanfaatkan oleh Soekarno dan Hatta untuk menggembleng mental dan kesadaran nasional rakyat Indonesia."
+                ],
+                options: ["Jawa Hokokai", "Putera (Pusat Tenaga Rakyat)", "Seinendan", "Chuo Sangi In"],
+                answer: 1
+            }
+        ];
+
+        // MODE 3: Susun Kronologi Peristiwa (Dari Awal ke Akhir)
+        const mode3Events = [
+            { id: "ev1", year: 1908, title: "Berdirinya Boedi Oetomo di STOVIA", desc: "20 Mei 1908 – Tonggak awal kebangkitan organisasi modern." },
+            { id: "ev2", year: 1912, title: "Pendirian Indische Partij di Bandung", desc: "25 Desember 1912 – Partai politik pertama oleh Tiga Serangkai." },
+            { id: "ev3", year: 1927, title: "Berdirinya Partai Nasional Indonesia (PNI)", desc: "4 Juli 1927 – Dipimpin Ir. Soekarno dengan asas Marhaenisme." },
+            { id: "ev4", year: 1928, title: "Ikrar Sumpah Pemuda pada Kongres Pemuda II", desc: "28 Oktober 1928 – Penegasan satu tanah air, bangsa, dan bahasa." },
+            { id: "ev5", year: 1943, title: "Pembentukan Putera & PETA Masa Jepang", desc: "Tahun 1943 – Pemanfaatan organisasi kooperatif & militer." }
+        ];
+
+        // -------------------------------------------------------------------
+        // 3. STATE APLIKASI & DATA LEADERBOARD AWAL (XI.1 & XI.2)
+        // -------------------------------------------------------------------
+        let currentUser = null;
+        let completedMaterials = [];
+        let activeModalMaterialId = null;
+        let currentLeaderboardFilter = 'ALL';
+
+        const defaultLeaderboard = [
+            { name: "Raka Aditya Pratama", className: "XI.1", mode: "Speed Quiz", score: 120, timestamp: "2026-11-15" },
+            { name: "Salsabila Azzahra", className: "XI.2", mode: "Tebak Tokoh", score: 115, timestamp: "2026-11-15" },
+            { name: "Muhammad Rifqi Fauzan", className: "XI.1", mode: "Susun Kronologi", score: 100, timestamp: "2026-11-16" },
+            { name: "Alya Nabila Putri", className: "XI.2", mode: "Speed Quiz", score: 100, timestamp: "2026-11-16" },
+            { name: "Dimas Arya Saputra", className: "XI.1", mode: "Tebak Tokoh", score: 95, timestamp: "2026-11-16" },
+            { name: "Keysha Maharani", className: "XI.2", mode: "Susun Kronologi", score: 80, timestamp: "2026-11-16" }
+        ];
+
+        // -------------------------------------------------------------------
+        // 4. INISIALISASI & NOTIFIKASI TOAST
+        // -------------------------------------------------------------------
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            
+            // Inisialisasi data leaderboard di localStorage jika belum ada
+            if (!localStorage.getItem('sman1katapang_lb')) {
+                localStorage.setItem('sman1katapang_lb', JSON.stringify(defaultLeaderboard));
+            }
+
+            setTimeout(() => {
+                const loader = document.getElementById('loadingOverlay');
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    checkSession();
+                }, 300);
+            }, 450);
+        });
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            let borderClass = 'border-violet-500/40 text-violet-200';
+            let iconName = 'info';
+            if (type === 'success') {
+                borderClass = 'border-emerald-500/40 text-emerald-200';
+                iconName = 'check-circle-2';
+            } else if (type === 'error') {
+                borderClass = 'border-red-500/40 text-red-200';
+                iconName = 'alert-circle';
+            }
+
+            toast.className = `glass-card p-3.5 rounded-2xl border ${borderClass} shadow-xl flex items-center gap-3 text-xs font-medium pointer-events-auto transition-all duration-300 transform translate-y-0`;
+            toast.innerHTML = `
+                <i data-lucide="${iconName}" class="w-4 h-4 shrink-0"></i>
+                <span class="flex-1">${message}</span>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-10px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+
+        // -------------------------------------------------------------------
+        // 5. SISTEM AUTENTIKASI & SESI PENGGUNA
+        // -------------------------------------------------------------------
+        function checkSession() {
+            const savedUser = localStorage.getItem('sman1katapang_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                loadUserProgress();
+                showMainApp();
+            } else {
+                document.getElementById('loginPage').classList.remove('hidden');
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const name = document.getElementById('loginName').value.trim();
+            const className = document.getElementById('loginClass').value;
+            const pass = document.getElementById('loginPass').value.trim();
+
+            if (!name || !className) {
+                showToast('Mohon lengkapi nama dan pilih kelas terlebih dahulu.', 'error');
+                return;
+            }
+
+            if (className === 'GURU') {
+                if (pass !== 'guru2026' && pass !== 'sejarah2026') {
+                    showToast('Password Guru salah! Gunakan: guru2026', 'error');
+                    return;
+                }
+                currentUser = { name, className: 'Guru Pengampu', role: 'Admin' };
+            } else {
+                if (pass !== 'sejarah2026') {
+                    showToast('Password kelas salah! Gunakan: sejarah2026', 'error');
+                    return;
+                }
+                currentUser = { name, className, role: 'Siswa' };
+            }
+
+            localStorage.setItem('sman1katapang_user', JSON.stringify(currentUser));
+            loadUserProgress();
+            document.getElementById('loginPage').classList.add('hidden');
+            showMainApp();
+            showToast(`Selamat datang, ${currentUser.name}!`, 'success');
+        }
+
+        function quickLogin(name, className, role) {
+            currentUser = {
+                name,
+                className: className === 'GURU' ? 'Guru Pengampu' : className,
+                role
+            };
+            localStorage.setItem('sman1katapang_user', JSON.stringify(currentUser));
+            loadUserProgress();
+            document.getElementById('loginPage').classList.add('hidden');
+            showMainApp();
+            showToast(`Masuk sebagai ${currentUser.name} (${currentUser.className})`, 'success');
+        }
+
+        function logout() {
+            localStorage.removeItem('sman1katapang_user');
+            currentUser = null;
+            exitQuizArena(true);
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+            showToast('Anda telah keluar dari sesi belajar.', 'info');
+        }
+
+        function loadUserProgress() {
+            if (!currentUser) return;
+            const key = `sman1katapang_prog_${currentUser.name}`;
+            const savedProg = localStorage.getItem(key);
+            completedMaterials = savedProg ? JSON.parse(savedProg) : [];
+        }
+
+        function saveUserProgress() {
+            if (!currentUser) return;
+            const key = `sman1katapang_prog_${currentUser.name}`;
+            localStorage.setItem(key, JSON.stringify(completedMaterials));
+            updateDashboardStats();
+            renderMaterialsGrid();
+        }
+
+        function showMainApp() {
+            document.getElementById('mainApp').classList.remove('hidden');
+            document.getElementById('displayName').innerText = currentUser.name;
+            document.getElementById('heroClassBadge').innerText = currentUser.className;
+            document.getElementById('userBadgeSession').innerHTML = `
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <span>${currentUser.name} • <strong>${currentUser.className}</strong></span>
+            `;
+            
+            updateDashboardStats();
+            renderMaterialsGrid();
+            renderLeaderboard();
+            switchTab('home');
+        }
+
+        function updateDashboardStats() {
+            const total = materialsData.length;
+            const done = completedMaterials.length;
+            const pct = Math.round((done / total) * 100);
+
+            document.getElementById('progressPercentText').innerText = `${pct}%`;
+            document.getElementById('progressBarFill').style.width = `${pct}%`;
+            document.getElementById('completedCountText').innerText = done;
+
+            // Hitung skor terbaik user dari leaderboard
+            const lb = getLeaderboardData();
+            const userScores = lb.filter(item => item.name.toLowerCase() === currentUser.name.toLowerCase()).map(i => i.score);
+            const best = userScores.length > 0 ? Math.max(...userScores) : 0;
+            document.getElementById('personalBestScore').innerText = `${best} Poin`;
+        }
+
+        // -------------------------------------------------------------------
+        // 6. NAVIGASI TAB
+        // -------------------------------------------------------------------
+        function switchTab(tabId) {
+            const tabs = ['home', 'material', 'quiz', 'leaderboard'];
+            tabs.forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                
+                // Desktop Nav styling
+                const dBtn = document.getElementById(`dnav-${t}`);
+                if (dBtn) {
+                    dBtn.className = t === tabId
+                        ? "px-4 py-1.5 rounded-full text-xs font-semibold bg-violet-600 text-white transition-all flex items-center gap-1.5 shadow-md shadow-violet-600/25"
+                        : "px-4 py-1.5 rounded-full text-xs font-semibold text-gray-400 hover:text-white transition-all flex items-center gap-1.5";
+                }
+
+                // Mobile Nav styling
+                const mBtn = document.getElementById(`mnav-${t}`);
+                if (mBtn) {
+                    mBtn.className = t === tabId
+                        ? "flex flex-col items-center gap-1 text-violet-400 transition-all"
+                        : "flex flex-col items-center gap-1 text-gray-400 hover:text-white transition-all";
+                }
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            if (tabId === 'leaderboard') renderLeaderboard();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            lucide.createIcons();
+        }
+
+        // -------------------------------------------------------------------
+        // 7. MODUL MATERI LENGKAP & MODAL BACAAN
+        // -------------------------------------------------------------------
+        function renderMaterialsGrid() {
+            const grid = document.getElementById('materialGrid');
+            grid.innerHTML = materialsData.map(mod => {
+                const isDone = completedMaterials.includes(mod.id);
+                return `
+                    <div onclick="openMaterialModal('${mod.id}')" class="glass-card glass-card-hover p-6 rounded-3xl cursor-pointer flex flex-col justify-between relative group">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <span class="px-2.5 py-1 rounded-full bg-violet-500/15 border border-violet-500/30 text-violet-300 text-[10px] font-bold uppercase tracking-wider">${mod.badge}</span>
+                                ${isDone 
+                                    ? `<span class="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3 h-3"></i> Selesai</span>`
+                                    : `<span class="text-[11px] font-bold text-gray-500">${mod.year}</span>`
+                                }
+                            </div>
+                            <h3 class="text-base sm:text-lg font-bold text-white group-hover:text-violet-300 transition-colors mb-2">${mod.title}</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed mb-5">${mod.snippet}</p>
+                        </div>
+                        <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-violet-400">
+                            <span>Buka Modul Lengkap</span>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function openMaterialModal(modId) {
+            const mod = materialsData.find(m => m.id === modId);
+            if (!mod) return;
+
+            activeModalMaterialId = modId;
+            document.getElementById('modalCategory').innerText = `${mod.badge} • ${mod.year}`;
+            document.getElementById('modalTitle').innerText = mod.title;
+
+            const isDone = completedMaterials.includes(modId);
+            const completeBtn = document.getElementById('modalCompleteBtn');
+            if (isDone) {
+                completeBtn.className = "px-6 py-2.5 rounded-full bg-emerald-600/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold transition-all flex items-center gap-2";
+                completeBtn.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4"></i><span>Sudah Selesai Dipelajari</span>`;
+            } else {
+                completeBtn.className = "px-6 py-2.5 rounded-full bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold transition-all shadow-lg shadow-violet-600/25 flex items-center gap-2";
+                completeBtn.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4"></i><span>Tandai Selesai Dipelajari</span>`;
+            }
+
+            document.getElementById('modalBody').innerHTML = `
+                <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-violet-400 mb-1.5 flex items-center gap-1.5">
+                        <i data-lucide="history" class="w-3.5 h-3.5"></i> Latar Belakang Sejarah
+                    </h4>
+                    <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">${mod.latarBelakang}</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-fuchsia-400 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="users" class="w-3.5 h-3.5"></i> Tokoh Penggerak
+                        </h4>
+                        <ul class="space-y-1.5 text-xs text-gray-300">
+                            ${mod.tokoh.map(t => `<li class="flex items-start gap-2"><span class="text-fuchsia-400">•</span><span>${t}</span></li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="target" class="w-3.5 h-3.5"></i> Tujuan & Strategi Perjuangan
+                        </h4>
+                        <p class="text-xs text-gray-300 leading-relaxed">${mod.tujuanStrategi}</p>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-violet-950/20 border border-violet-500/30">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-violet-300 mb-2 flex items-center gap-1.5">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Poin Penting Ujian & Analisis
+                    </h4>
+                    <ul class="space-y-2 text-xs text-gray-200">
+                        ${mod.poinPenting.map(p => `<li class="flex items-start gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-violet-400 shrink-0 mt-0.5"></i><span>${p}</span></li>`).join('')}
+                    </ul>
+                </div>
+            `;
+
+            document.getElementById('materialModal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeMaterialModal() {
+            document.getElementById('materialModal').classList.add('hidden');
+            activeModalMaterialId = null;
+        }
+
+        function toggleMaterialComplete() {
+            if (!activeModalMaterialId) return;
+            const idx = completedMaterials.indexOf(activeModalMaterialId);
+            if (idx === -1) {
+                completedMaterials.push(activeModalMaterialId);
+                showToast('Modul ditandai selesai! Progres belajar diperbarui.', 'success');
+            } else {
+                completedMaterials.splice(idx, 1);
+                showToast('Status selesai modul dibatalkan.', 'info');
+            }
+            saveUserProgress();
+            openMaterialModal(activeModalMaterialId);
+        }
+
+        // -------------------------------------------------------------------
+        // 8. LOGIKA KUIS VARIATIF (MODE 1, MODE 2, MODE 3)
+        // -------------------------------------------------------------------
+        function exitQuizArena(silent = false) {
+            clearInterval(m1TimerInterval);
+            document.getElementById('arenaMode1').classList.add('hidden');
+            document.getElementById('arenaMode2').classList.add('hidden');
+            document.getElementById('arenaMode3').classList.add('hidden');
+            document.getElementById('quizResultScreen').classList.add('hidden');
+            document.getElementById('quizModeSelector').classList.remove('hidden');
+            if (!silent) lucide.createIcons();
+        }
+
+        // --- MODE 1: SPEED QUIZ ---
+        let m1Index = 0;
+        let m1Score = 0;
+        let m1Streak = 0;
+        let m1Time = 25;
+        let m1TimerInterval = null;
+        let m1Answered = false;
+
+        function startMode1() {
+            m1Index = 0;
+            m1Score = 0;
+            m1Streak = 0;
+            document.getElementById('quizModeSelector').classList.add('hidden');
+            document.getElementById('quizResultScreen').classList.add('hidden');
+            document.getElementById('arenaMode1').classList.remove('hidden');
+            renderMode1Question();
+        }
+
+        function renderMode1Question() {
+            if (m1Index >= mode1Questions.length) {
+                finishQuizSession('Speed Quiz', m1Score);
+                return;
+            }
+
+            m1Answered = false;
+            const qData = mode1Questions[m1Index];
+            document.getElementById('m1Counter').innerText = `Soal ${m1Index + 1} dari ${mode1Questions.length}`;
+            document.getElementById('m1LiveScore').innerText = m1Score;
+            document.getElementById('m1QuestionText').innerText = qData.q;
+            document.getElementById('m1ExplanationBox').classList.add('hidden');
+
+            const streakBadge = document.getElementById('m1StreakBadge');
+            if (m1Streak >= 2) {
+                streakBadge.innerText = `🔥 Streak x${m1Streak}`;
+                streakBadge.classList.remove('hidden');
+            } else {
+                streakBadge.classList.add('hidden');
+            }
+
+            const optsDiv = document.getElementById('m1OptionsContainer');
+            optsDiv.innerHTML = qData.options.map((opt, idx) => `
+                <button id="m1opt-${idx}" onclick="selectMode1Option(${idx})" class="w-full text-left p-4 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-violet-500 hover:bg-slate-900 text-xs sm:text-sm font-medium transition-all flex items-center justify-between gap-3 group">
+                    <span>${opt}</span>
+                    <span class="w-7 h-7 rounded-full bg-slate-900 border border-slate-700 text-xs font-bold flex items-center justify-center text-gray-400 group-hover:bg-violet-600 group-hover:text-white group-hover:border-violet-500 shrink-0 transition-all">
+                        ${String.fromCharCode(65 + idx)}
+                    </span>
+                </button>
+            `).join('');
+
+            // Timer
+            clearInterval(m1TimerInterval);
+            m1Time = 25;
+            document.getElementById('m1TimeLeft').innerText = m1Time;
+            m1TimerInterval = setInterval(() => {
+                m1Time--;
+                document.getElementById('m1TimeLeft').innerText = m1Time;
+                if (m1Time <= 0) {
+                    clearInterval(m1TimerInterval);
+                    if (!m1Answered) selectMode1Option(-1);
+                }
+            }, 1000);
+        }
+
+        function selectMode1Option(selectedIdx) {
+            if (m1Answered) return;
+            m1Answered = true;
+            clearInterval(m1TimerInterval);
+
+            const qData = mode1Questions[m1Index];
+            const isCorrect = selectedIdx === qData.answer;
+
+            // Highlight jawaban
+            qData.options.forEach((_, idx) => {
+                const btn = document.getElementById(`m1opt-${idx}`);
+                btn.disabled = true;
+                if (idx === qData.answer) {
+                    btn.className = "w-full text-left p-4 rounded-2xl bg-emerald-950/50 border border-emerald-500 text-emerald-200 text-xs sm:text-sm font-semibold flex items-center justify-between gap-3";
+                } else if (idx === selectedIdx && !isCorrect) {
+                    btn.className = "w-full text-left p-4 rounded-2xl bg-red-950/50 border border-red-500 text-red-200 text-xs sm:text-sm font-semibold flex items-center justify-between gap-3";
+                } else {
+                    btn.className = "w-full text-left p-4 rounded-2xl bg-slate-950/40 border border-slate-800/50 text-gray-500 text-xs sm:text-sm flex items-center justify-between gap-3 opacity-60";
+                }
+            });
+
+            const expBox = document.getElementById('m1ExplanationBox');
+            const expIcon = document.getElementById('m1ExpIcon');
+            const expTitle = document.getElementById('m1ExpTitle');
+            const expText = document.getElementById('m1ExpText');
+
+            if (isCorrect) {
+                m1Streak++;
+                const bonus = m1Streak >= 2 ? 5 : 0;
+                const earned = 15 + bonus;
+                m1Score += earned;
+                document.getElementById('m1LiveScore').innerText = m1Score;
+
+                expIcon.className = "p-2 rounded-xl bg-emerald-500/15 text-emerald-400 shrink-0";
+                expIcon.innerHTML = `<i data-lucide="check-circle-2" class="w-5 h-5"></i>`;
+                expTitle.className = "text-sm font-bold text-emerald-400";
+                expTitle.innerText = bonus > 0 ? `Tepat Sekali! (+${earned} Poin termasuk Streak Bonus)` : `Jawaban Benar! (+${earned} Poin)`;
+            } else {
+                m1Streak = 0;
+                expIcon.className = "p-2 rounded-xl bg-red-500/15 text-red-400 shrink-0";
+                expIcon.innerHTML = `<i data-lucide="x-circle" class="w-5 h-5"></i>`;
+                expTitle.className = "text-sm font-bold text-red-400";
+                expTitle.innerText = selectedIdx === -1 ? "Waktu Habis!" : "Kurang Tepat!";
+            }
+
+            expText.innerText = qData.explanation;
+            expBox.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function nextMode1Question() {
+            m1Index++;
+            renderMode1Question();
+        }
+
+        // --- MODE 2: TEBAK TOKOH & ORGANISASI (CLUE BERTAHAP) ---
+        let m2Index = 0;
+        let m2Score = 0;
+        let m2CluesShown = 1;
+        let m2RoundLocked = false;
+
+        function startMode2() {
+            m2Index = 0;
+            m2Score = 0;
+            document.getElementById('quizModeSelector').classList.add('hidden');
+            document.getElementById('quizResultScreen').classList.add('hidden');
+            document.getElementById('arenaMode2').classList.remove('hidden');
+            renderMode2Round();
+        }
+
+        function renderMode2Round() {
+            if (m2Index >= mode2Rounds.length) {
+                finishQuizSession('Tebak Tokoh', m2Score);
+                return;
+            }
+
+            m2CluesShown = 1;
+            m2RoundLocked = false;
+            const rData = mode2Rounds[m2Index];
+
+            document.getElementById('m2Counter').innerText = `Ronde ${m2Index + 1} dari ${mode2Rounds.length}`;
+            document.getElementById('m2LiveScore').innerText = m2Score;
+            updateMode2CluesUI();
+
+            const optsDiv = document.getElementById('m2OptionsContainer');
+            optsDiv.innerHTML = rData.options.map((opt, idx) => `
+                <button id="m2opt-${idx}" onclick="answerMode2(${idx})" class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-fuchsia-500 hover:bg-slate-900 text-xs sm:text-sm font-bold text-left transition-all flex items-center justify-between">
+                    <span>${opt}</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-fuchsia-400"></i>
+                </button>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function updateMode2CluesUI() {
+            const rData = mode2Rounds[m2Index];
+            const potential = 25 - ((m2CluesShown - 1) * 5);
+            document.getElementById('m2PotentialPoints').innerText = `Potensi Poin: +${potential}`;
+            document.getElementById('m2ClueCountInfo').innerText = `Petunjuk ${m2CluesShown} / ${rData.clues.length} terbuka`;
+
+            const container = document.getElementById('m2CluesContainer');
+            container.innerHTML = rData.clues.slice(0, m2CluesShown).map((clue, idx) => `
+                <div class="p-3.5 rounded-2xl bg-fuchsia-950/20 border border-fuchsia-500/30 text-xs sm:text-sm text-gray-200 flex items-start gap-2.5">
+                    <span class="px-2 py-0.5 rounded-md bg-fuchsia-600/30 text-fuchsia-300 text-[10px] font-bold shrink-0">#${idx + 1}</span>
+                    <span>${clue}</span>
+                </div>
+            `).join('');
+
+            const revealBtn = document.getElementById('m2RevealBtn');
+            if (m2CluesShown >= rData.clues.length) {
+                revealBtn.classList.add('opacity-40', 'pointer-events-none');
+            } else {
+                revealBtn.classList.remove('opacity-40', 'pointer-events-none');
+            }
+        }
+
+        function revealNextClue() {
+            const rData = mode2Rounds[m2Index];
+            if (m2CluesShown < rData.clues.length && !m2RoundLocked) {
+                m2CluesShown++;
+                updateMode2CluesUI();
+            }
+        }
+
+        function answerMode2(selectedIdx) {
+            if (m2RoundLocked) return;
+            m2RoundLocked = true;
+
+            const rData = mode2Rounds[m2Index];
+            const isCorrect = selectedIdx === rData.answer;
+            const potential = 25 - ((m2CluesShown - 1) * 5);
+
+            rData.options.forEach((_, idx) => {
+                const btn = document.getElementById(`m2opt-${idx}`);
+                if (idx === rData.answer) {
+                    btn.className = "p-4 rounded-2xl bg-emerald-950/60 border border-emerald-500 text-emerald-200 text-xs sm:text-sm font-bold text-left flex items-center justify-between";
+                } else if (idx === selectedIdx && !isCorrect) {
+                    btn.className = "p-4 rounded-2xl bg-red-950/60 border border-red-500 text-red-200 text-xs sm:text-sm font-bold text-left flex items-center justify-between";
+                } else {
+                    btn.className = "p-4 rounded-2xl bg-slate-950/40 border border-slate-800/40 text-gray-600 text-xs sm:text-sm text-left opacity-50";
+                }
+            });
+
+            if (isCorrect) {
+                m2Score += potential;
+                showToast(`Benar! Kamu meraih +${potential} poin.`, 'success');
+            } else {
+                showToast(`Jawaban yang tepat: ${rData.options[rData.answer]}`, 'error');
+            }
+
+            document.getElementById('m2LiveScore').innerText = m2Score;
+            setTimeout(() => {
+                m2Index++;
+                renderMode2Round();
+            }, 1300);
+        }
+
+        // --- MODE 3: SUSUN KRONOLOGI PERISTIWA ---
+        let m3CurrentOrder = [];
+        let m3Checked = false;
+
+        function startMode3() {
+            m3Checked = false;
+            // Acak urutan peristiwa
+            m3CurrentOrder = [...mode3Events].sort(() => Math.random() - 0.5);
+            // Pastikan tidak langsung terurut sempurna saat mulai
+            if (m3CurrentOrder.every((item, idx) => item.id === mode3Events[idx].id)) {
+                [m3CurrentOrder[0], m3CurrentOrder[1]] = [m3CurrentOrder[1], m3CurrentOrder[0]];
+            }
+
+            document.getElementById('quizModeSelector').classList.add('hidden');
+            document.getElementById('quizResultScreen').classList.add('hidden');
+            document.getElementById('m3FeedbackArea').classList.add('hidden');
+            document.getElementById('m3SubmitBtn').classList.remove('hidden');
+            document.getElementById('arenaMode3').classList.remove('hidden');
+            renderMode3List();
+        }
+
+        function renderMode3List() {
+            const container = document.getElementById('m3ListContainer');
+            container.innerHTML = m3CurrentOrder.map((ev, idx) => {
+                let statusStyle = "bg-slate-950/80 border-slate-800";
+                let yearBadge = `<span class="px-2.5 py-1 rounded-full bg-slate-900 border border-slate-700 text-gray-400 text-[11px] font-bold">Posisi #${idx + 1}</span>`;
+
+                if (m3Checked) {
+                    const isRightPos = ev.id === mode3Events[idx].id;
+                    statusStyle = isRightPos
+                        ? "bg-emerald-950/40 border-emerald-500/60"
+                        : "bg-red-950/40 border-red-500/60";
+                    yearBadge = `<span class="px-2.5 py-1 rounded-full ${isRightPos ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300'} text-[11px] font-bold">Tahun ${ev.year}</span>`;
+                }
+
+                return `
+                    <div class="p-4 rounded-2xl border ${statusStyle} flex items-center justify-between gap-3 transition-all">
+                        <div class="flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">
+                                ${idx + 1}
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap mb-1">
+                                    <h4 class="text-xs sm:text-sm font-bold text-white">${ev.title}</h4>
+                                    ${yearBadge}
+                                </div>
+                                <p class="text-[11px] sm:text-xs text-gray-400">${ev.desc}</p>
+                            </div>
+                        </div>
+
+                        ${!m3Checked ? `
+                        <div class="flex flex-col gap-1 shrink-0">
+                            <button onclick="moveMode3Item(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} class="p-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-emerald-500 text-gray-300 disabled:opacity-30 transition-all" title="Geser Naik">
+                                <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="moveMode3Item(${idx}, 1)" ${idx === m3CurrentOrder.length - 1 ? 'disabled' : ''} class="p-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-emerald-500 text-gray-300 disabled:opacity-30 transition-all" title="Geser Turun">
+                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function moveMode3Item(index, direction) {
+            if (m3Checked) return;
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= m3CurrentOrder.length) return;
+
+            const temp = m3CurrentOrder[index];
+            m3CurrentOrder[index] = m3CurrentOrder[targetIndex];
+            m3CurrentOrder[targetIndex] = temp;
+            renderMode3List();
+        }
+
+        function checkMode3Order() {
+            if (m3Checked) return;
+            m3Checked = true;
+
+            let correctPositions = 0;
+            m3CurrentOrder.forEach((ev, idx) => {
+                if (ev.id === mode3Events[idx].id) correctPositions++;
+            });
+
+            const calculatedScore = correctPositions * 20;
+            renderMode3List();
+
+            document.getElementById('m3SubmitBtn').classList.add('hidden');
+            const feedback = document.getElementById('m3FeedbackArea');
+            feedback.classList.remove('hidden');
+            feedback.innerHTML = `
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h4 class="text-sm font-bold text-emerald-400">Hasil Analisis Kronologi: ${correctPositions} dari 5 Posisi Tepat!</h4>
+                        <p class="text-xs text-gray-300 mt-1">Urutan tahun yang benar adalah: <strong>1908 → 1912 → 1927 → 1928 → 1943</strong>.</p>
+                    </div>
+                    <button onclick="finishQuizSession('Susun Kronologi', ${calculatedScore})" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-full shrink-0 transition-all">
+                        Simpan Skor (${calculatedScore} Poin)
+                    </button>
+                </div>
+            `;
+        }
+
+        // --- SIMPAN SKOR & TAMPILKAN LAYAR HASIL ---
+        function finishQuizSession(modeName, finalScore) {
+            document.getElementById('arenaMode1').classList.add('hidden');
+            document.getElementById('arenaMode2').classList.add('hidden');
+            document.getElementById('arenaMode3').classList.add('hidden');
+
+            document.getElementById('resModeLabel').innerText = `Mode: ${modeName}`;
+            document.getElementById('resStudentName').innerText = currentUser.name;
+            document.getElementById('resStudentClass').innerText = currentUser.className;
+            document.getElementById('resFinalScore').innerText = finalScore;
+            document.getElementById('quizResultScreen').classList.remove('hidden');
+
+            // Simpan ke Leaderboard Lokal
+            const lb = getLeaderboardData();
+            lb.push({
+                name: currentUser.name,
+                className: currentUser.className,
+                mode: modeName,
+                score: finalScore,
+                timestamp: new Date().toISOString().split('T')[0]
+            });
+            localStorage.setItem('sman1katapang_lb', JSON.stringify(lb));
+            updateDashboardStats();
+
+            // Jika sudah di-deploy ke Google Apps Script (IS_PREVIEW = false)
+            if (!IS_PREVIEW && typeof google !== 'undefined' && google.script) {
+                google.script.run.saveQuizScore({
+                    name: currentUser.name,
+                    className: currentUser.className,
+                    mode: modeName,
+                    score: finalScore
+                });
+            }
+
+            showToast(`Skor ${finalScore} berhasil dicatat ke Papan Peringkat!`, 'success');
+            lucide.createIcons();
+        }
+
+        // -------------------------------------------------------------------
+        // 9. PAPAN PERINGKAT (LEADERBOARD) & REKAP NILAI KELAS XI.1 & XI.2
+        // -------------------------------------------------------------------
+        function getLeaderboardData() {
+            const raw = localStorage.getItem('sman1katapang_lb');
+            return raw ? JSON.parse(raw) : defaultLeaderboard;
+        }
+
+        function filterLeaderboard(classFilter) {
+            currentLeaderboardFilter = classFilter;
+            ['ALL', 'XI.1', 'XI.2'].forEach(f => {
+                const btn = document.getElementById(`lbFilter-${f}`);
+                if (btn) {
+                    btn.className = f === classFilter
+                        ? "px-4 py-1.5 rounded-full text-xs font-bold bg-violet-600 text-white transition-all shadow-md shadow-violet-600/20"
+                        : "px-4 py-1.5 rounded-full text-xs font-bold text-gray-400 hover:text-white transition-all";
+                }
+            });
+            renderLeaderboard();
+        }
+
+        function renderLeaderboard() {
+            let data = getLeaderboardData();
+            if (currentLeaderboardFilter !== 'ALL') {
+                data = data.filter(item => item.className === currentLeaderboardFilter);
+            }
+
+            // Urutkan dari skor tertinggi
+            data.sort((a, b) => b.score - a.score);
+
+            // Statistik Ringkas
+            document.getElementById('lbTopStudent').innerText = data.length > 0 ? `${data[0].name} (${data[0].score} Poin)` : '-';
+            const avg = data.length > 0 ? Math.round(data.reduce((sum, i) => sum + i.score, 0) / data.length) : 0;
+            document.getElementById('lbAvgScore').innerText = `${avg} Poin`;
+            document.getElementById('lbTotalEntries').innerText = `${data.length} Catatan Nilai`;
+
+            const tbody = document.getElementById('leaderboardTableBody');
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-gray-500">Belum ada data nilai untuk kelas ini.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map((row, idx) => {
+                let rankBadge = `<span class="w-7 h-7 rounded-full bg-slate-900 border border-slate-800 text-gray-400 text-xs font-bold inline-flex items-center justify-center">${idx + 1}</span>`;
+                if (idx === 0) {
+                    rankBadge = `<span class="w-7 h-7 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-300 text-xs font-extrabold inline-flex items-center justify-center">1</span>`;
+                } else if (idx === 1) {
+                    rankBadge = `<span class="w-7 h-7 rounded-full bg-slate-300/20 border border-slate-300/50 text-slate-200 text-xs font-extrabold inline-flex items-center justify-center">2</span>`;
+                } else if (idx === 2) {
+                    rankBadge = `<span class="w-7 h-7 rounded-full bg-orange-600/20 border border-orange-500/50 text-orange-300 text-xs font-extrabold inline-flex items-center justify-center">3</span>`;
+                }
+
+                const classBadgeColor = row.className === 'XI.1'
+                    ? 'bg-violet-500/15 text-violet-300 border-violet-500/30'
+                    : (row.className === 'XI.2' ? 'bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30' : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30');
+
+                return `
+                    <tr class="hover:bg-violet-950/15 transition-colors">
+                        <td class="py-3.5 px-4">${rankBadge}</td>
+                        <td class="py-3.5 px-4 font-bold text-white">${row.name}</td>
+                        <td class="py-3.5 px-4">
+                            <span class="px-2.5 py-0.5 rounded-full border text-[11px] font-semibold ${classBadgeColor}">${row.className}</span>
+                        </td>
+                        <td class="py-3.5 px-4 text-gray-400 text-xs">${row.mode}</td>
+                        <td class="py-3.5 px-4 text-right font-extrabold text-violet-400">${row.score}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>
