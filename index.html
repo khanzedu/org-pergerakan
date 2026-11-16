@@ -38,7 +38,7 @@
 <body class="bg-darkBg text-white font-sans min-h-screen flex flex-col selection:bg-primary selection:text-white">
 
     <script>
-        const IS_PREVIEW = false; // Terhubung langsung ke Google Sheets
+        const IS_PREVIEW = false;
         const GAS_EXEC_URL = "https://script.google.com/macros/s/AKfycbykcJkfgMCvPq0hPyLphsCCNRtNtCO1CIZbuTxzF-daT9objQQplilI5JjdWKmMU1Vd/exec";
     </script>
 
@@ -69,18 +69,10 @@
 
             <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">Nama Lengkap / Username</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500"><i data-lucide="user" class="w-4 h-4"></i></span>
-                        <input type="text" id="loginName" required placeholder="Nama lengkap siswa atau username guru" class="w-full bg-slate-900/85 border border-slate-800 rounded-xl px-4 py-3 pl-10 text-sm text-white focus:outline-none focus:border-primary transition-all">
-                    </div>
-                </div>
-
-                <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">Kelas</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500"><i data-lucide="users" class="w-4 h-4"></i></span>
-                        <select id="loginClass" required class="w-full bg-slate-900/85 border border-slate-800 rounded-xl px-4 py-3 pl-10 text-sm text-white focus:outline-none focus:border-primary transition-all appearance-none cursor-pointer">
+                        <select id="loginClass" onchange="toggleAdminPassField()" required class="w-full bg-slate-900/85 border border-slate-800 rounded-xl px-4 py-3 pl-10 text-sm text-white focus:outline-none focus:border-primary transition-all appearance-none cursor-pointer">
                             <option value="XI.1">Kelas XI.1</option>
                             <option value="XI.2">Kelas XI.2</option>
                             <option value="GURU">Guru Pengampu (Admin)</option>
@@ -89,16 +81,24 @@
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">Password Akses</label>
+                <div id="studentNameWrapper">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">Nama Lengkap Siswa</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500"><i data-lucide="user" class="w-4 h-4"></i></span>
+                        <input type="text" id="loginName" required placeholder="Ketik nama lengkap Anda..." class="w-full bg-slate-900/85 border border-slate-800 rounded-xl px-4 py-3 pl-10 text-sm text-white focus:outline-none focus:border-primary transition-all">
+                    </div>
+                </div>
+
+                <div id="adminPassWrapper" class="hidden">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">Password Guru Pengampu</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500"><i data-lucide="lock" class="w-4 h-4"></i></span>
-                        <input type="password" id="loginPass" required placeholder="Masukkan kata sandi" class="w-full bg-slate-900/85 border border-slate-800 rounded-xl px-4 py-3 pl-10 text-sm text-white focus:outline-none focus:border-primary transition-all">
+                        <input type="password" id="loginPass" placeholder="Masukkan kata sandi guru" class="w-full bg-slate-900/85 border border-slate-800 rounded-xl px-4 py-3 pl-10 text-sm text-white focus:outline-none focus:border-primary transition-all">
                     </div>
                 </div>
 
                 <button type="submit" id="btnLoginSubmit" class="w-full mt-2 bg-primary hover:bg-primaryHover text-white font-semibold py-3 rounded-xl transition-all shadow-lg shadow-primary/25 flex items-center justify-center gap-2">
-                    <span>Masuk Aplikasi</span>
+                    <span>Masuk & Mulai Belajar</span>
                     <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
             </form>
@@ -252,7 +252,6 @@
                     </div>
                 </div>
 
-                <!-- Statistik Ringkas -->
                 <div class="grid grid-cols-3 gap-3">
                     <div class="glass-card p-4 rounded-2xl text-center">
                         <span class="text-[11px] text-gray-400 block">Total Peserta</span>
@@ -268,7 +267,6 @@
                     </div>
                 </div>
 
-                <!-- Tabel Nilai -->
                 <div class="glass-card rounded-2xl overflow-hidden border border-slate-800">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs">
@@ -433,11 +431,33 @@
         window.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             renderMaterials();
+            toggleAdminPassField();
             setTimeout(() => {
                 hideLoading();
                 checkSession();
             }, 400);
         });
+
+        function toggleAdminPassField() {
+            const cls = document.getElementById('loginClass').value;
+            const passWrap = document.getElementById('adminPassWrapper');
+            const passInput = document.getElementById('loginPass');
+            const nameWrap = document.getElementById('studentNameWrapper');
+            const nameInput = document.getElementById('loginName');
+
+            if (cls === 'GURU') {
+                passWrap.classList.remove('hidden');
+                passInput.required = true;
+                nameInput.value = 'LILY ULFAH HANI, S.Pd';
+                nameWrap.classList.add('hidden');
+            } else {
+                passWrap.classList.add('hidden');
+                passInput.required = false;
+                passInput.value = '';
+                if (nameInput.value === 'LILY ULFAH HANI, S.Pd') nameInput.value = '';
+                nameWrap.classList.remove('hidden');
+            }
+        }
 
         function showLoading(text) {
             document.getElementById('loadingText').innerText = text || 'Memproses...';
@@ -468,7 +488,7 @@
             const className = document.getElementById('loginClass').value;
             const password = document.getElementById('loginPass').value.trim();
 
-            showLoading('Memverifikasi akses ke Google Sheets...');
+            showLoading('Menyambungkan ke kelas ' + className + '...');
 
             const onSuccess = (res) => {
                 hideLoading();
@@ -478,7 +498,7 @@
                     document.getElementById('loginPage').classList.add('hidden');
                     showApp();
                 } else {
-                    alert((res && res.message) || 'Login gagal. Periksa nama/password Anda.');
+                    alert((res && res.message) || 'Gagal masuk. Periksa kembali isian Anda.');
                 }
             };
 
@@ -489,12 +509,11 @@
                         hideLoading();
                         alert('Gagal terhubung ke server: ' + err.message);
                     })
-                    .verifyLogin({ name, username: name, className, password });
+                    .verifyLogin({ name, className, password });
             } else {
-                // Fallback jika dibuka di luar iframe GAS
                 fetch(GAS_EXEC_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: 'login', name, username: name, className, password })
+                    body: JSON.stringify({ action: 'login', name, className, password })
                 })
                 .then(r => r.json())
                 .then(onSuccess)
